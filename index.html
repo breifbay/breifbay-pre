@@ -1,0 +1,1775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BriefBay — Pre-Release Early Access</title>
+  <link rel="icon" type="image/png" href="logo.png" />
+
+  <style>
+    /* ==========================================================
+       BRIEFBAY SECURE CLEAN THEME - ZERO EXTERNAL DEPENDENCY
+       Deep Navy (#0B1E36) & Electric Blue (#2563EB)
+       ========================================================== */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: #0B1E36;
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(37, 99, 235, 0.15) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(15, 42, 77, 0.3) 0px, transparent 50%);
+      color: #F8FAFC;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.5;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* Header */
+    header {
+      background: rgba(11, 30, 54, 0.95);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(8px);
+    }
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 0;
+    }
+    .brand-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .brand-logo-img {
+      width: 36px;
+      height: 36px;
+      min-width: 36px;
+      max-width: 36px;
+      min-height: 36px;
+      max-height: 36px;
+      object-fit: contain;
+      border-radius: 8px;
+      background: #FFFFFF;
+      padding: 2px;
+    }
+    .brand-title {
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: #FFFFFF;
+      line-height: 1.1;
+    }
+    .brand-title span {
+      color: #38BDF8;
+    }
+    .brand-badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 2px 7px;
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      color: #38BDF8;
+      border-radius: 4px;
+      letter-spacing: 0.5px;
+    }
+
+    /* Live VIP Pill */
+    .vip-live-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      background: rgba(245, 158, 11, 0.12);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      color: #FBBF24;
+      padding: 5px 12px;
+      border-radius: 9999px;
+    }
+    .pulse-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #F59E0B;
+      box-shadow: 0 0 8px #F59E0B;
+    }
+
+    /* Main Section */
+    main {
+      flex: 1;
+      padding: 36px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Progress Tracker */
+    .steps-nav {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 24px;
+      width: 100%;
+      max-width: 440px;
+    }
+    .step-node {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #94A3B8;
+    }
+    .step-circle {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #152E52;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #94A3B8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .step-node.active .step-circle {
+      background: #2563EB;
+      border-color: #60A5FA;
+      color: #FFFFFF;
+      box-shadow: 0 0 12px rgba(37, 99, 235, 0.5);
+    }
+    .step-node.active {
+      color: #FFFFFF;
+    }
+    .step-node.completed .step-circle {
+      background: #10B981;
+      border-color: #10B981;
+      color: #FFFFFF;
+    }
+    .step-line {
+      flex: 1;
+      height: 2px;
+      background: rgba(255, 255, 255, 0.1);
+      min-width: 16px;
+    }
+    .step-line.filled {
+      background: #2563EB;
+    }
+
+    /* Cards */
+    .card {
+      background: #0E2440;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 16px;
+      padding: 32px;
+      width: 100%;
+      max-width: 460px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+      position: relative;
+    }
+    .card-title {
+      font-size: 22px;
+      font-weight: 800;
+      color: #FFFFFF;
+      letter-spacing: -0.4px;
+      text-align: center;
+      margin-bottom: 6px;
+    }
+    .card-subtitle {
+      font-size: 13px;
+      color: #94A3B8;
+      text-align: center;
+      margin-bottom: 24px;
+      line-height: 1.4;
+    }
+
+    /* Form Inputs */
+    .form-group {
+      margin-bottom: 16px;
+      text-align: left;
+    }
+    .form-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: #CBD5E1;
+      margin-bottom: 6px;
+    }
+    .input-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .input-prefix {
+      position: absolute;
+      left: 14px;
+      color: #64748B;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    .form-control {
+      width: 100%;
+      height: 44px;
+      background: #081628;
+      border: 1px solid #1E3A5F;
+      border-radius: 10px;
+      color: #FFFFFF;
+      font-size: 14px;
+      padding: 0 14px;
+      outline: none;
+      transition: all 0.2s;
+    }
+    .form-control.with-prefix {
+      padding-left: 32px;
+    }
+    .form-control:focus {
+      border-color: #2563EB;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25);
+    }
+    .form-control::placeholder {
+      color: #64748B;
+    }
+
+    /* Eye Toggle */
+    .eye-btn {
+      position: absolute;
+      right: 12px;
+      background: transparent;
+      border: none;
+      color: #94A3B8;
+      cursor: pointer;
+      padding: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .eye-btn:hover {
+      color: #FFFFFF;
+    }
+    .eye-btn svg {
+      width: 18px;
+      height: 18px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+    }
+
+    /* Action Buttons */
+    .btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      height: 46px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: none;
+      text-decoration: none;
+    }
+    .btn-google {
+      background: #FFFFFF;
+      color: #0B1E36;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      margin-bottom: 14px;
+    }
+    .btn-google:hover {
+      background: #F1F5F9;
+      transform: translateY(-1px);
+    }
+    .btn-google svg {
+      width: 18px;
+      height: 18px;
+    }
+    .btn-primary {
+      background: #2563EB;
+      color: #FFFFFF;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+    }
+    .btn-primary:hover {
+      background: #1D4ED8;
+      transform: translateY(-1px);
+    }
+
+    /* Divider */
+    .divider {
+      display: flex;
+      align-items: center;
+      margin: 18px 0;
+      color: #64748B;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-weight: 600;
+    }
+    .divider::before, .divider::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: rgba(255, 255, 255, 0.1);
+    }
+    .divider span {
+      padding: 0 10px;
+    }
+
+    /* Profile Pill in Step 2 */
+    .user-pill {
+      background: #081628;
+      border: 1px solid #1E3A5F;
+      border-radius: 10px;
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .user-pill-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .user-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #152E52;
+      border: 1px solid #38BDF8;
+      object-fit: cover;
+    }
+    .user-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: #FFFFFF;
+      line-height: 1.2;
+    }
+    .user-email {
+      font-size: 11px;
+      color: #94A3B8;
+      font-family: monospace;
+    }
+
+    /* Role Cards */
+    .role-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .role-card {
+      background: #081628;
+      border: 2px solid #1E3A5F;
+      border-radius: 12px;
+      padding: 14px;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .role-card:hover {
+      border-color: #38BDF8;
+    }
+    .role-card.selected {
+      border-color: #2563EB;
+      background: #0D233F;
+      box-shadow: 0 0 15px rgba(37, 99, 235, 0.25);
+    }
+    .role-card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+    .role-icon { font-size: 20px; }
+    .role-spots-tag {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: rgba(245, 158, 11, 0.15);
+      color: #FBBF24;
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+    .role-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #FFFFFF;
+      margin-bottom: 3px;
+    }
+    .role-desc {
+      font-size: 11px;
+      color: #94A3B8;
+      line-height: 1.3;
+      margin-bottom: 8px;
+    }
+    .role-offer-box {
+      background: rgba(37, 99, 235, 0.12);
+      border: 1px solid rgba(37, 99, 235, 0.3);
+      padding: 6px 8px;
+      border-radius: 6px;
+      font-size: 10px;
+      font-weight: 700;
+      color: #93C5FD;
+    }
+    .role-offer-box.client-perk {
+      background: rgba(245, 158, 11, 0.12);
+      border-color: rgba(245, 158, 11, 0.3);
+      color: #FCD34D;
+    }
+
+    /* Pass Card */
+    .pass-card {
+      background: linear-gradient(135deg, #0F2A4D 0%, #081628 100%);
+      border: 1px solid #F59E0B;
+      border-radius: 14px;
+      padding: 20px;
+      margin: 18px 0;
+      text-align: left;
+      box-shadow: 0 0 25px rgba(245, 158, 11, 0.15);
+    }
+    .pass-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding-bottom: 10px;
+      margin-bottom: 14px;
+    }
+    .pass-id {
+      font-size: 12px;
+      font-weight: 800;
+      font-family: monospace;
+      color: #FBBF24;
+      background: rgba(245, 158, 11, 0.15);
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+    .pass-perk-highlight {
+      background: rgba(245, 158, 11, 0.15);
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      padding: 12px;
+      border-radius: 8px;
+      margin-top: 12px;
+    }
+    .pass-perk-label {
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: #FBBF24;
+      letter-spacing: 0.5px;
+    }
+    .pass-perk-value {
+      font-size: 13px;
+      font-weight: 800;
+      color: #FFFFFF;
+      margin-top: 2px;
+    }
+
+    /* Admin Section */
+    .admin-wrap {
+      width: 100%;
+      max-width: 1000px;
+    }
+    .admin-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+    .stat-card {
+      background: #0E2440;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 16px;
+      text-align: left;
+    }
+    .stat-card.gold-border {
+      border-color: rgba(245, 158, 11, 0.4);
+      background: rgba(245, 158, 11, 0.05);
+    }
+    .stat-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: #94A3B8;
+      text-transform: uppercase;
+    }
+    .stat-num {
+      font-size: 26px;
+      font-weight: 800;
+      color: #FFFFFF;
+      margin: 4px 0 2px;
+    }
+    .stat-sub {
+      font-size: 11px;
+      color: #38BDF8;
+    }
+
+    .table-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+    .filter-tabs {
+      display: flex;
+      gap: 6px;
+      background: #081628;
+      padding: 4px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .filter-btn {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 5px 10px;
+      border-radius: 6px;
+      background: transparent;
+      color: #94A3B8;
+      border: none;
+      cursor: pointer;
+    }
+    .filter-btn.active {
+      background: #2563EB;
+      color: #FFFFFF;
+    }
+    .search-input {
+      height: 36px;
+      background: #081628;
+      border: 1px solid #1E3A5F;
+      border-radius: 8px;
+      color: #FFFFFF;
+      padding: 0 12px;
+      font-size: 12px;
+      outline: none;
+      width: 220px;
+    }
+
+    .table-card {
+      background: #0E2440;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 12px;
+      overflow: hidden;
+      width: 100%;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 12px;
+    }
+    th {
+      background: #081628;
+      color: #94A3B8;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 12px 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      letter-spacing: 0.5px;
+    }
+    td {
+      padding: 12px 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      color: #CBD5E1;
+      vertical-align: middle;
+    }
+
+    /* VIP ROW HIGHLIGHT */
+    tr.vip-highlight {
+      background: rgba(245, 158, 11, 0.06);
+      border-left: 4px solid #F59E0B;
+    }
+
+    .badge-vip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 10px;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 4px;
+      background: rgba(245, 158, 11, 0.2);
+      color: #FBBF24;
+      border: 1px solid rgba(245, 158, 11, 0.4);
+    }
+    .badge-perk-client {
+      font-size: 11px;
+      font-weight: 700;
+      color: #FCD34D;
+      background: rgba(245, 158, 11, 0.15);
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+    .badge-perk-freelancer {
+      font-size: 11px;
+      font-weight: 700;
+      color: #93C5FD;
+      background: rgba(37, 99, 235, 0.15);
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+
+    /* Admin Action buttons */
+    .btn-remove-vip {
+      background: rgba(245, 158, 11, 0.15);
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      color: #FBBF24;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 8px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .btn-remove-vip:hover {
+      background: #F59E0B;
+      color: #000000;
+    }
+    .btn-make-vip {
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      color: #38BDF8;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 8px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .btn-make-vip:hover {
+      background: #0284C7;
+      color: #FFFFFF;
+    }
+    .btn-delete-user {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      color: #F87171;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 8px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .btn-delete-user:hover {
+      background: #EF4444;
+      color: #FFFFFF;
+    }
+
+    /* Modal */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(4px);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .modal-box {
+      background: #0E2440;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 14px;
+      padding: 24px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    }
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .modal-close {
+      background: transparent;
+      border: none;
+      color: #94A3B8;
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 110;
+      background: #081628;
+      border: 1px solid #2563EB;
+      color: #FFFFFF;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 10px 16px;
+      border-radius: 8px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s;
+    }
+
+    footer {
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 16px 0;
+      font-size: 12px;
+      color: #64748B;
+      text-align: center;
+    }
+
+    .hidden { display: none !important; }
+
+    @media (max-width: 640px) {
+      .admin-stats-grid { grid-template-columns: 1fr 1fr; }
+      .role-grid { grid-template-columns: 1fr; }
+      .card { padding: 24px 18px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ======================================================== -->
+  <!-- PUBLIC HEADER (CLEAN & ADMIN HIDDEN)                     -->
+  <!-- ======================================================== -->
+  <header>
+    <div class="container header-inner">
+      <div class="brand-wrap" onclick="switchView('onboarding')">
+        <img 
+          src="logo.png" 
+          alt="BriefBay" 
+          class="brand-logo-img"
+          width="36" 
+          height="36"
+          onerror="this.onerror=null; this.src='logo.svg'"
+        />
+        <div>
+          <div class="brand-title">Brief<span>Bay</span></div>
+        </div>
+        <span class="brand-badge">Pre-Release</span>
+      </div>
+
+      <div class="header-actions">
+        <!-- Live VIP Spots Counter -->
+        <div class="vip-live-pill">
+          <span class="pulse-dot"></span>
+          <span>First 15 VIP: <strong id="headerVipCount">--</strong> Left</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ======================================================== -->
+  <!-- USER ONBOARDING (STEPS 1 TO 4)                           -->
+  <!-- ======================================================== -->
+  <main id="onboardingSection">
+    
+    <!-- Step Tracker -->
+    <div class="steps-nav">
+      <div id="stepNode1" class="step-node active">
+        <div class="step-circle">1</div>
+        <span>Google</span>
+      </div>
+      <div id="stepLine1" class="step-line"></div>
+      <div id="stepNode2" class="step-node">
+        <div class="step-circle">2</div>
+        <span>Account</span>
+      </div>
+      <div id="stepLine2" class="step-line"></div>
+      <div id="stepNode3" class="step-node">
+        <div class="step-circle">3</div>
+        <span>Role</span>
+      </div>
+      <div id="stepLine3" class="step-line"></div>
+      <div id="stepNode4" class="step-node">
+        <div class="step-circle">4</div>
+        <span>Pass</span>
+      </div>
+    </div>
+
+    <!-- STEP 1: GOOGLE & EMAIL SIGN IN -->
+    <div id="step1Card" class="card">
+      <h1 class="card-title">Join BriefBay Early Access</h1>
+      <p class="card-subtitle">Connect your Google account to unlock founding member perks for our freelance marketplace launch.</p>
+
+      <!-- Google Button -->
+      <button type="button" class="btn btn-google" onclick="handleGoogleSignInClick()">
+        <svg viewBox="0 0 24 24">
+          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+        </svg>
+        <span>Sign in with Google</span>
+      </button>
+
+      <div class="divider"><span>or continue with email</span></div>
+
+      <!-- Real-time Email Form -->
+      <form id="step1EmailForm" onsubmit="handleStep1EmailSubmit(event)">
+        <div class="form-group">
+          <label class="form-label">Your Email Address</label>
+          <input 
+            type="email" 
+            id="step1EmailInput" 
+            required 
+            placeholder="e.g. yourname@gmail.com" 
+            class="form-control"
+          />
+        </div>
+        <button type="submit" class="btn btn-primary">
+          <span>Continue</span> &rarr;
+        </button>
+      </form>
+
+      <!-- Live Offers Teaser -->
+      <div style="margin-top: 20px; padding: 12px; background: #081628; border-radius: 10px; border: 1px solid #1E3A5F; font-size: 11px; text-align: left; display: flex; flex-direction: column; gap: 6px;">
+        <div style="color: #FCD34D;">⭐ <strong>Clients:</strong> First 15 get <strong>25% OFF</strong> on their first purchase.</div>
+        <div style="color: #93C5FD;">🚀 <strong>Freelancers:</strong> First 15 get their <strong>gigs & works featured</strong>.</div>
+      </div>
+    </div>
+
+    <!-- STEP 2: USERNAME & PASSWORD WITH EYE TOGGLE -->
+    <div id="step2Card" class="card hidden">
+      <div class="user-pill">
+        <div class="user-pill-left">
+          <img id="step2Avatar" src="" class="user-avatar" alt="Avatar" width="32" height="32" />
+          <div>
+            <div id="step2Name" class="user-name">Google User</div>
+            <div id="step2Email" class="user-email">email@gmail.com</div>
+          </div>
+        </div>
+        <button type="button" onclick="goToStep(1)" style="background: none; border: none; color: #38BDF8; font-size: 11px; cursor: pointer; font-weight: 600;">Change</button>
+      </div>
+
+      <h2 class="card-title">Create Your Account</h2>
+      <p class="card-subtitle">Set your username and password to secure your pre-release marketplace profile.</p>
+
+      <form id="step2Form" onsubmit="handleStep2Submit(event)">
+        <!-- Username -->
+        <div class="form-group">
+          <label class="form-label">Username</label>
+          <div class="input-wrap">
+            <span class="input-prefix">@</span>
+            <input 
+              type="text" 
+              id="usernameInput" 
+              required 
+              minlength="3" 
+              maxlength="20"
+              placeholder="choose_username" 
+              class="form-control with-prefix"
+            />
+          </div>
+        </div>
+
+        <!-- Password with Eye Toggle -->
+        <div class="form-group">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <label class="form-label" style="margin-bottom:0;">Password</label>
+            <span style="font-size: 11px; color: #64748B;">Hidden & Protected</span>
+          </div>
+          <div class="input-wrap">
+            <input 
+              type="password" 
+              id="passwordInput" 
+              required 
+              minlength="6"
+              placeholder="Enter secure password" 
+              class="form-control"
+              style="padding-right: 40px;"
+            />
+            <button type="button" class="eye-btn" onclick="togglePasswordVisibility('passwordInput', 'eyeOpenSvg', 'eyeClosedSvg')" title="Show/Hide Password">
+              <svg id="eyeOpenSvg" class="hidden" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+              </svg>
+              <svg id="eyeClosedSvg" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="margin-top: 10px;">
+          Create Account & Continue &rarr;
+        </button>
+      </form>
+    </div>
+
+    <!-- STEP 3: ROLE & FIRST 15 OFFERS -->
+    <div id="step3Card" class="card hidden">
+      <h2 class="card-title">Choose Your Role</h2>
+      <p class="card-subtitle">Select how you'll use BriefBay to claim your dedicated First 15 Founder Offer.</p>
+
+      <div class="role-grid">
+        <!-- Client -->
+        <div id="roleCardClient" class="role-card selected" onclick="selectRole('CLIENT')">
+          <div class="role-card-top">
+            <span class="role-icon">💼</span>
+            <span id="spotsBadgeClient" class="role-spots-tag">-- / 15 Left</span>
+          </div>
+          <div class="role-title">Client / Creator</div>
+          <div class="role-desc">I want to hire top video editors & developers.</div>
+          <div class="role-offer-box client-perk">
+            🎁 FIRST 15: 25% OFF first purchase!
+          </div>
+        </div>
+
+        <!-- Freelancer -->
+        <div id="roleCardFreelancer" class="role-card" onclick="selectRole('FREELANCER')">
+          <div class="role-card-top">
+            <span class="role-icon">⚡</span>
+            <span id="spotsBadgeFreelancer" class="role-spots-tag">-- / 15 Left</span>
+          </div>
+          <div class="role-title">Freelancer</div>
+          <div class="role-desc">I want to offer services & get hired.</div>
+          <div class="role-offer-box">
+            🚀 FIRST 15: Featured & promoted gigs!
+          </div>
+        </div>
+      </div>
+
+      <!-- Email Confirmation -->
+      <form id="step3Form" onsubmit="handleStep3Submit(event)">
+        <div class="form-group">
+          <label class="form-label">Email Address</label>
+          <input 
+            type="email" 
+            id="step3EmailInput" 
+            required 
+            placeholder="Confirm your email" 
+            class="form-control"
+          />
+        </div>
+
+        <button type="submit" id="btnJoinEarlyAccess" class="btn btn-primary" style="margin-top: 10px;">
+          Join Early Access &rarr;
+        </button>
+      </form>
+    </div>
+
+    <!-- STEP 4: CONGRATULATIONS & FOUNDER PASS (CLEANED UP) -->
+    <div id="step4Card" class="card hidden" style="text-align: center;">
+      <div style="font-size: 40px; margin-bottom: 8px;">🎉</div>
+      <h2 class="card-title">Congratulations!</h2>
+      <p class="card-subtitle">Your early access spot has been reserved successfully.</p>
+
+      <!-- Founder Pass -->
+      <div class="pass-card">
+        <div class="pass-header">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <img src="logo.png" alt="Logo" class="brand-logo-img" width="24" height="24" onerror="this.onerror=null; this.src='logo.svg'" />
+            <strong style="color:#FFFFFF; font-size:13px;">BriefBay Founding Pass</strong>
+          </div>
+          <span id="passIdTag" class="pass-id">BB-VIP-001</span>
+        </div>
+
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom: 12px;">
+          <img id="passAvatar" src="" class="user-avatar" width="40" height="40" style="width:40px; height:40px;" />
+          <div>
+            <div style="display:flex; align-items:center; gap:6px;">
+              <strong id="passUsername" style="color:#FFFFFF; font-size:14px;">@username</strong>
+              <span id="passRoleBadge" style="font-size:9px; font-weight:800; padding:2px 6px; border-radius:4px; background:#2563EB; color:#FFF;">CLIENT</span>
+            </div>
+            <div id="passEmail" style="font-size:11px; color:#94A3B8; font-family:monospace;">user@gmail.com</div>
+          </div>
+        </div>
+
+        <!-- Highlighted Perk -->
+        <div class="pass-perk-highlight">
+          <div id="passPerkLabel" class="pass-perk-label">⭐ FIRST 15 VIP BENEFIT (SPOT #1)</div>
+          <div id="passPerkValue" class="pass-perk-value">25% OFF on your first purchase!</div>
+        </div>
+      </div>
+
+      <!-- Concise Single-Sentence Guidance (As requested by user) -->
+      <p style="font-size:12px; color:#94A3B8; margin: 16px 0 14px; line-height: 1.5;">
+        Login with the same mail id used to register here to access your account on the main marketplace.
+      </p>
+
+      <a id="btnContinueComingSoon" href="/coming-soon" class="btn btn-primary" style="text-decoration:none;">
+        <span>Continue</span> &rarr;
+      </a>
+      <div id="comingSoonCountdownNotice" style="font-size:11px; color:#64748B; margin-top:10px;">
+        Redirecting to Coming Soon in <strong id="countdownSecs" style="color:#38BDF8;">3</strong>s...
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ======================================================== -->
+  <!-- HIDDEN ADMIN AUTHENTICATION CARD                         -->
+  <!-- ======================================================== -->
+  <main id="adminAuthSection" class="hidden">
+    <div class="card" style="max-width: 380px;">
+      <div style="text-align: center; margin-bottom: 20px;">
+        <img src="logo.png" alt="BriefBay" class="brand-logo-img" width="40" height="40" style="margin: 0 auto 10px;" onerror="this.onerror=null; this.src='logo.svg'" />
+        <h2 style="font-size: 20px; font-weight: 800; color: #FFFFFF;">Admin Verification</h2>
+        <p style="font-size: 12px; color: #94A3B8; margin-top: 4px;">Enter administrative credentials to access registry.</p>
+      </div>
+
+      <form id="adminLoginForm" onsubmit="handleAdminLogin(event)">
+        <div class="form-group">
+          <label class="form-label">Admin Username</label>
+          <input type="text" id="adminUserField" required placeholder="admin" class="form-control" autocomplete="off" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Admin Password</label>
+          <div class="input-wrap">
+            <input type="password" id="adminPassField" required placeholder="••••••••••••" class="form-control" style="padding-right: 40px;" />
+            <button type="button" class="eye-btn" onclick="togglePasswordVisibility('adminPassField', 'adminEyeOpen', 'adminEyeClosed')">
+              <svg id="adminEyeOpen" class="hidden" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+              <svg id="adminEyeClosed" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <button type="submit" id="btnAdminSubmit" class="btn btn-primary" style="margin-top: 14px;">
+          Authorize & Enter
+        </button>
+      </form>
+    </div>
+  </main>
+
+  <!-- ======================================================== -->
+  <!-- PROTECTED ADMIN DASHBOARD                                -->
+  <!-- ======================================================== -->
+  <main id="adminDashboardSection" class="hidden">
+    <div class="container admin-wrap">
+      
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:10px;">
+        <div>
+          <h1 style="font-size:24px; font-weight:800; color:#FFFFFF;">Admin Registry & Management</h1>
+          <p style="font-size:12px; color:#94A3B8;">First 15 members in each role are highlighted with VIP status.</p>
+        </div>
+        <div style="display:flex; gap:8px;">
+          <button type="button" class="btn" style="width:auto; height:36px; padding:0 12px; background:#2563EB; color:#FFF; font-size:12px;" onclick="syncAllToDb()">Sync to DB</button>
+          <button type="button" class="btn" style="width:auto; height:36px; padding:0 12px; background:#152E52; color:#FFF; font-size:12px;" onclick="exportCsv()">Export CSV</button>
+          <button type="button" class="btn" style="width:auto; height:36px; padding:0 12px; background:rgba(239,68,68,0.2); border:1px solid rgba(239,68,68,0.4); color:#F87171; font-size:12px;" onclick="handleAdminLogout()">Logout</button>
+        </div>
+      </div>
+
+      <!-- Stats Grid -->
+      <div class="admin-stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">Total Registered</div>
+          <div id="statTotal" class="stat-num">0</div>
+          <div class="stat-sub">Early access members</div>
+        </div>
+
+        <div class="stat-card gold-border">
+          <div class="stat-label" style="color:#FBBF24;">First 15 Clients</div>
+          <div class="stat-num" id="statClientsVip">0 / 15</div>
+          <div class="stat-sub" style="color:#FCD34D;" id="statClientsRem">15 spots left</div>
+        </div>
+
+        <div class="stat-card gold-border">
+          <div class="stat-label" style="color:#38BDF8;">First 15 Freelancers</div>
+          <div class="stat-num" id="statFreelancersVip">0 / 15</div>
+          <div class="stat-sub" style="color:#93C5FD;" id="statFreelancersRem">15 spots left</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-label">Marketplace DB</div>
+          <div class="stat-num" style="font-size:18px; color:#10B981; margin-top:8px;">Connected</div>
+          <div class="stat-sub" style="color:#64748B;">BriefBay prisma/dev.db</div>
+        </div>
+      </div>
+
+      <!-- Toolbar -->
+      <div class="table-toolbar">
+        <div class="filter-tabs">
+          <button id="filterAll" class="filter-btn active" onclick="setFilter('ALL')">All (<span id="countAll">0</span>)</button>
+          <button id="filterVip" class="filter-btn" onclick="setFilter('VIP')">⭐ First 15 VIPs (<span id="countVip">0</span>)</button>
+          <button id="filterClients" class="filter-btn" onclick="setFilter('CLIENT')">Clients (<span id="countClients">0</span>)</button>
+          <button id="filterFreelancers" class="filter-btn" onclick="setFilter('FREELANCER')">Freelancers (<span id="countFreelancers">0</span>)</button>
+        </div>
+        <input 
+          type="text" 
+          id="adminSearchInput" 
+          placeholder="Search username, email, role..." 
+          class="search-input"
+          oninput="renderAdminTable()"
+        />
+      </div>
+
+      <!-- Table with REMOVE FROM TOP 15 BUTTON -->
+      <div class="table-card">
+        <table>
+          <thead>
+            <tr>
+              <th>Member</th>
+              <th>Role</th>
+              <th>Status (First 15)</th>
+              <th>Offer / Benefit</th>
+              <th>Registered</th>
+              <th style="text-align: right;">Action</th>
+            </tr>
+          </thead>
+          <tbody id="adminTableBody">
+            <!-- Rendered by JS -->
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ======================================================== -->
+  <!-- GOOGLE ACCOUNT SELECTOR MODAL                            -->
+  <!-- ======================================================== -->
+  <div id="googleModal" class="modal-backdrop hidden">
+    <div class="modal-box">
+      <div class="modal-header">
+        <strong style="color:#FFFFFF; font-size:14px; display:flex; align-items:center; gap:8px;">
+          <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>
+          Google Authentication
+        </strong>
+        <button type="button" class="modal-close" onclick="closeGoogleModal()">&times;</button>
+      </div>
+
+      <p style="font-size:12px; color:#94A3B8; margin-bottom:14px;">Select or enter your Google Account:</p>
+
+      <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:14px;">
+        <div onclick="selectGoogleAccount('Burhan Khan', 'burhankhan.creator@gmail.com')" style="background:#081628; border:1px solid #1E3A5F; padding:10px 12px; border-radius:8px; cursor:pointer; display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <div style="font-size:12px; font-weight:700; color:#FFFFFF;">Burhan Khan</div>
+            <div style="font-size:11px; color:#94A3B8; font-family:monospace;">burhankhan.creator@gmail.com</div>
+          </div>
+          <span style="font-size:10px; color:#10B981; font-weight:700;">Verified</span>
+        </div>
+      </div>
+
+      <div style="border-top:1px solid rgba(255,255,255,0.1); padding-top:12px;">
+        <label class="form-label">Or enter custom Gmail:</label>
+        <input type="text" id="customGoogleName" placeholder="Full Name" class="form-control" style="margin-bottom:8px;" />
+        <input type="email" id="customGoogleEmail" placeholder="you@gmail.com" class="form-control" style="margin-bottom:12px;" />
+        <button type="button" class="btn btn-primary" onclick="submitCustomGoogle()">Continue with this Google Account</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast hidden"></div>
+
+  <!-- Footer with Hidden Admin Entrance -->
+  <footer>
+    <div class="container">
+      &copy; 2027 BriefBay Inc. Pre-Release Portal. Escrow-backed creator & freelancer marketplace.
+      <span style="cursor:pointer; opacity: 0.15; margin-left: 6px;" onclick="openAdminPortal()" title="Administrative Portal">🔒</span>
+    </div>
+  </footer>
+
+  <!-- ======================================================== -->
+  <!-- APPLICATION CORE LOGIC                                   -->
+  <!-- ======================================================== -->
+  <script>
+    const appState = {
+      step: 1,
+      view: 'onboarding',
+      googleUser: null,
+      credentials: { username: '', password: '' },
+      role: 'CLIENT',
+      adminFilter: 'ALL',
+      adminToken: sessionStorage.getItem('bb_admin_token') || '',
+      users: []
+    };
+
+    window.addEventListener('DOMContentLoaded', async () => {
+      // Check query params for Google OAuth callback
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('google_auth') === 'success') {
+        const name = urlParams.get('name') || 'Google User';
+        const email = urlParams.get('email') || '';
+        const picture = urlParams.get('picture') || '';
+        selectGoogleAccount(name, email, picture);
+      }
+
+      await loadPublicStats();
+      checkHash();
+    });
+
+    window.addEventListener('hashchange', checkHash);
+
+    function checkHash() {
+      if (window.location.hash === '#admin') {
+        openAdminPortal();
+      } else {
+        switchView('onboarding');
+      }
+    }
+
+    // Public Stats
+    async function loadPublicStats() {
+      try {
+        const res = await fetch('/api/stats');
+        if (res.ok) {
+          const data = await res.json();
+          if (data.stats) updatePublicCounters(data.stats);
+        }
+      } catch (err) {}
+    }
+
+    function updatePublicCounters(stats) {
+      const remainingTotal = (stats.clientVipRemaining || 0) + (stats.freelancerVipRemaining || 0);
+      document.getElementById('headerVipCount').textContent = remainingTotal;
+      document.getElementById('spotsBadgeClient').textContent = `${stats.clientVipClaimed || 0} / 15 Claimed (${stats.clientVipRemaining || 15} Left)`;
+      document.getElementById('spotsBadgeFreelancer').textContent = `${stats.freelancerVipClaimed || 0} / 15 Claimed (${stats.freelancerVipRemaining || 15} Left)`;
+    }
+
+    // Switch Views
+    function switchView(view) {
+      appState.view = view;
+      const onboardingSection = document.getElementById('onboardingSection');
+      const adminAuthSection = document.getElementById('adminAuthSection');
+      const adminDashboardSection = document.getElementById('adminDashboardSection');
+
+      if (view === 'onboarding') {
+        onboardingSection.classList.remove('hidden');
+        adminAuthSection.classList.add('hidden');
+        adminDashboardSection.classList.add('hidden');
+        if (window.location.hash === '#admin') history.replaceState(null, null, ' ');
+      }
+    }
+
+    // Admin Portal Routing
+    function openAdminPortal() {
+      const onboardingSection = document.getElementById('onboardingSection');
+      const adminAuthSection = document.getElementById('adminAuthSection');
+      const adminDashboardSection = document.getElementById('adminDashboardSection');
+
+      onboardingSection.classList.add('hidden');
+      window.location.hash = '#admin';
+
+      if (appState.adminToken) {
+        adminAuthSection.classList.add('hidden');
+        adminDashboardSection.classList.remove('hidden');
+        fetchAdminUsers();
+      } else {
+        adminAuthSection.classList.remove('hidden');
+        adminDashboardSection.classList.add('hidden');
+      }
+    }
+
+    // Admin Login Handler
+    async function handleAdminLogin(e) {
+      e.preventDefault();
+      const user = document.getElementById('adminUserField').value.trim();
+      const pass = document.getElementById('adminPassField').value;
+      const btn = document.getElementById('btnAdminSubmit');
+
+      btn.disabled = true;
+      btn.textContent = 'Verifying credentials...';
+
+      try {
+        const res = await fetch('/api/admin/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username: user, password: pass })
+        });
+
+        const data = await res.json();
+        btn.disabled = false;
+        btn.textContent = 'Authorize & Enter';
+
+        if (res.ok && data.token) {
+          appState.adminToken = data.token;
+          sessionStorage.setItem('bb_admin_token', data.token);
+          showToast('Welcome, Administrator.');
+          openAdminPortal();
+        } else {
+          showToast(data.error || 'Authentication rejected.');
+        }
+      } catch (err) {
+        btn.disabled = false;
+        btn.textContent = 'Authorize & Enter';
+        showToast('Connection error.');
+      }
+    }
+
+    // Admin Logout Handler
+    async function handleAdminLogout() {
+      if (appState.adminToken) {
+        try {
+          await fetch('/api/admin/logout', {
+            method: 'POST',
+            headers: { 'X-Admin-Token': appState.adminToken }
+          });
+        } catch {}
+      }
+      appState.adminToken = '';
+      sessionStorage.removeItem('bb_admin_token');
+      showToast('Logged out of Admin Portal.');
+      switchView('onboarding');
+    }
+
+    // Fetch Protected Admin Users
+    async function fetchAdminUsers() {
+      try {
+        const res = await fetch('/api/admin/users', {
+          headers: { 'Authorization': `Bearer ${appState.adminToken}` }
+        });
+
+        if (res.status === 401) {
+          handleAdminLogout();
+          return;
+        }
+
+        if (res.ok) {
+          const data = await res.json();
+          appState.users = data.users || [];
+          updateAdminStats(data.stats || {});
+          renderAdminTable();
+        }
+      } catch (err) {
+        showToast('Failed to load admin registry.');
+      }
+    }
+
+    function updateAdminStats(stats) {
+      document.getElementById('statTotal').textContent = stats.total || 0;
+      document.getElementById('statClientsVip').textContent = `${stats.clientVipClaimed || 0} / 15`;
+      document.getElementById('statClientsRem').textContent = `${stats.clientVipRemaining || 15} left for 25% OFF`;
+      document.getElementById('statFreelancersVip').textContent = `${stats.freelancerVipClaimed || 0} / 15`;
+      document.getElementById('statFreelancersRem').textContent = `${stats.freelancerVipRemaining || 15} left for Featured Work`;
+
+      const vipCount = appState.users.filter(u => u.isFirst15).length;
+      document.getElementById('countAll').textContent = appState.users.length;
+      document.getElementById('countVip').textContent = vipCount;
+      document.getElementById('countClients').textContent = appState.users.filter(u => u.role === 'CLIENT').length;
+      document.getElementById('countFreelancers').textContent = appState.users.filter(u => u.role === 'FREELANCER').length;
+    }
+
+    function setFilter(f) {
+      appState.adminFilter = f;
+      const ids = { 'ALL': 'filterAll', 'VIP': 'filterVip', 'CLIENT': 'filterClients', 'FREELANCER': 'filterFreelancers' };
+      Object.keys(ids).forEach(key => {
+        document.getElementById(ids[key]).classList.toggle('active', key === f);
+      });
+      renderAdminTable();
+    }
+
+    // Render Admin Table with "REMOVE FROM TOP 15" Button
+    function renderAdminTable() {
+      const tbody = document.getElementById('adminTableBody');
+      if (!tbody) return;
+
+      const query = (document.getElementById('adminSearchInput')?.value || '').toLowerCase().trim();
+
+      let list = appState.users.filter(u => {
+        if (appState.adminFilter === 'VIP') return u.isFirst15;
+        if (appState.adminFilter === 'CLIENT') return u.role === 'CLIENT';
+        if (appState.adminFilter === 'FREELANCER') return u.role === 'FREELANCER';
+        return true;
+      });
+
+      if (query) {
+        list = list.filter(u => 
+          u.username.toLowerCase().includes(query) ||
+          u.email.toLowerCase().includes(query) ||
+          u.role.toLowerCase().includes(query)
+        );
+      }
+
+      if (list.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:20px; color:#64748B;">No members registered yet.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = list.map(u => {
+        const isVip = u.isFirst15;
+        const rowClass = isVip ? 'class="vip-highlight"' : '';
+        const dateStr = new Date(u.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+
+        const statusTag = isVip 
+          ? `<span class="badge-vip">⭐ VIP #${u.rank}</span>`
+          : `<span style="color:#64748B; font-family:monospace;">Member #${u.rank || '-'}</span>`;
+
+        const perkTag = isVip 
+          ? (u.role === 'CLIENT' 
+              ? `<span class="badge-perk-client">🏷️ 25% OFF</span>` 
+              : `<span class="badge-perk-freelancer">⚡ Featured Gig</span>`)
+          : `<span style="color:#64748B;">Standard Access</span>`;
+
+        // ACTION BUTTONS: Toggle VIP & Delete User
+        const vipBtn = isVip
+          ? `<button type="button" class="btn-remove-vip" onclick="handleToggleVip('${u.email}', '${u.username}', false)">Remove from Top 15</button>`
+          : `<button type="button" class="btn-make-vip" onclick="handleToggleVip('${u.email}', '${u.username}', true)">⭐ Make VIP</button>`;
+
+        const deleteBtn = `<button type="button" class="btn-delete-user" onclick="handleDeleteUser('${u.email}', '${u.username}')" title="Permanently delete user">🗑️ Delete</button>`;
+
+        const actionCol = `<div style="display:flex; justify-content:flex-end; gap:6px; align-items:center;">${vipBtn}${deleteBtn}</div>`;
+
+        return `
+          <tr ${rowClass}>
+            <td>
+              <div style="display:flex; align-items:center; gap:8px;">
+                <img src="${u.avatar}" width="28" height="28" style="width:28px; height:28px; border-radius:50%; background:#152E52;" />
+                <div>
+                  <strong style="color:#FFFFFF;">@${u.username}</strong>
+                  <div style="font-size:11px; color:#94A3B8; font-family:monospace;">${u.email}</div>
+                </div>
+              </div>
+            </td>
+            <td>
+              <span style="font-size:10px; font-weight:700; padding:2px 6px; border-radius:4px; background:${u.role === 'CLIENT' ? 'rgba(245,158,11,0.2)' : 'rgba(37,99,235,0.2)'}; color:${u.role === 'CLIENT' ? '#FBBF24' : '#93C5FD'};">
+                ${u.role}
+              </span>
+            </td>
+            <td>${statusTag}</td>
+            <td>${perkTag}</td>
+            <td style="font-family:monospace; color:#94A3B8;">${dateStr}</td>
+            <td style="text-align: right;">${actionCol}</td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    // TOGGLE VIP (PROMOTE / DEMOTE)
+    async function handleToggleVip(email, username, makeVip) {
+      const actionText = makeVip ? 'promote to Top 15 VIP' : 'remove from Top 15';
+      if (!confirm(`Are you sure you want to ${actionText} for @${username}?`)) return;
+
+      try {
+        const res = await fetch('/api/admin/toggle-vip', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${appState.adminToken}`
+          },
+          body: JSON.stringify({ email })
+        });
+
+        const data = await res.json();
+        if (res.ok && data.success) {
+          showToast(data.message);
+          await fetchAdminUsers();
+          await loadPublicStats();
+        } else {
+          showToast(data.error || 'Failed to update VIP status.');
+        }
+      } catch (err) {
+        showToast('Connection error.');
+      }
+    }
+
+    // PERMANENTLY DELETE USER FROM REGISTRY AND MARKETPLACE DB
+    async function handleDeleteUser(email, username) {
+      if (!confirm(`⚠️ PERMANENT DELETE: Remove @${username} (${email}) completely from the registry and BriefBay database?`)) {
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/admin/delete-user', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${appState.adminToken}`
+          },
+          body: JSON.stringify({ email })
+        });
+
+        const data = await res.json();
+        if (res.ok && data.success) {
+          showToast(data.message || `Deleted @${username}.`);
+          await fetchAdminUsers();
+          await loadPublicStats();
+        } else {
+          showToast(data.error || 'Failed to delete user.');
+        }
+      } catch (err) {
+        showToast('Connection error while deleting user.');
+      }
+    }
+
+    // Sync All to DB
+    async function syncAllToDb() {
+      showToast('Syncing all users to BriefBay database...');
+      try {
+        const res = await fetch('/api/admin/sync', {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${appState.adminToken}` }
+        });
+        const d = await res.json();
+        if (res.ok) {
+          showToast(d.message || 'Synced to dev.db!');
+        } else {
+          showToast(d.error || 'Sync failed.');
+        }
+      } catch {
+        showToast('Connection error.');
+      }
+    }
+
+    // CSV Export
+    function exportCsv() {
+      if (!appState.users.length) return showToast('No data to export.');
+      const headers = ['ID', 'Username', 'Email', 'Role', 'IsFirst15', 'Rank', 'Perk', 'CreatedAt'];
+      const rows = appState.users.map(u => [
+        u.id, u.username, u.email, u.role, u.isFirst15 ? 'YES' : 'NO', u.rank, `"${u.perk}"`, u.createdAt
+      ]);
+      const csv = 'data:text/csv;charset=utf-8,' + [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+      const link = document.createElement('a');
+      link.setAttribute('href', encodeURI(csv));
+      link.setAttribute('download', `briefbay_registry_${Date.now()}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      showToast('Exported CSV.');
+    }
+
+    // Password Eye Toggle
+    function togglePasswordVisibility(inputId, openSvgId, closedSvgId) {
+      const input = document.getElementById(inputId);
+      const eyeOpen = document.getElementById(openSvgId);
+      const eyeClosed = document.getElementById(closedSvgId);
+
+      if (input.type === 'password') {
+        input.type = 'text';
+        eyeOpen.classList.remove('hidden');
+        eyeClosed.classList.add('hidden');
+      } else {
+        input.type = 'password';
+        eyeOpen.classList.add('hidden');
+        eyeClosed.classList.remove('hidden');
+      }
+    }
+
+    // Step 1: Google Click
+    async function handleGoogleSignInClick() {
+      window.location.href = '/auth/google';
+    }
+
+    function closeGoogleModal() {
+      document.getElementById('googleModal').classList.add('hidden');
+    }
+
+    function selectGoogleAccount(name, email, picture) {
+      closeGoogleModal();
+      const avatar = picture || `https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(name)}`;
+      appState.googleUser = { name, email, picture: avatar };
+
+      document.getElementById('step2Avatar').src = avatar;
+      document.getElementById('step2Name').textContent = name;
+      document.getElementById('step2Email').textContent = email;
+      document.getElementById('step3EmailInput').value = email;
+
+      const suggestedUser = name.toLowerCase().replace(/[^a-z0-9]/g, '_');
+      document.getElementById('usernameInput').value = suggestedUser;
+
+      showToast(`Connected as ${name}`);
+      goToStep(2);
+    }
+
+    function submitCustomGoogle() {
+      const name = document.getElementById('customGoogleName').value.trim();
+      const email = document.getElementById('customGoogleEmail').value.trim();
+      if (!name || !email || !email.includes('@')) {
+        showToast('Please enter name and valid Gmail.');
+        return;
+      }
+      selectGoogleAccount(name, email);
+    }
+
+    // Step 1: Email Form Submit
+    function handleStep1EmailSubmit(e) {
+      e.preventDefault();
+      const email = document.getElementById('step1EmailInput').value.trim();
+      if (!email || !email.includes('@')) {
+        showToast('Please enter a valid email.');
+        return;
+      }
+      const defaultName = email.split('@')[0].replace(/[^a-zA-Z0-9]/g, ' ');
+      selectGoogleAccount(defaultName, email);
+    }
+
+    // Step 2 Submit
+    function handleStep2Submit(e) {
+      e.preventDefault();
+      const username = document.getElementById('usernameInput').value.trim().toLowerCase().replace(/[^a-z0-9_]/g, '');
+      const password = document.getElementById('passwordInput').value;
+
+      if (!username || username.length < 3) {
+        showToast('Username must be at least 3 characters.');
+        return;
+      }
+
+      appState.credentials = { username, password };
+      goToStep(3);
+    }
+
+    // Step 3 Role
+    function selectRole(role) {
+      appState.role = role;
+      document.getElementById('roleCardClient').classList.toggle('selected', role === 'CLIENT');
+      document.getElementById('roleCardFreelancer').classList.toggle('selected', role === 'FREELANCER');
+    }
+
+    // Step 3 Submit
+    async function handleStep3Submit(e) {
+      e.preventDefault();
+      const email = document.getElementById('step3EmailInput').value.trim().toLowerCase();
+      const btn = document.getElementById('btnJoinEarlyAccess');
+
+      if (!email || !email.includes('@')) {
+        showToast('Please provide a valid email.');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Securing spot...';
+
+      const payload = {
+        googleUser: appState.googleUser,
+        username: appState.credentials.username,
+        password: appState.credentials.password,
+        role: appState.role,
+        email: email
+      };
+
+      try {
+        const res = await fetch('/api/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await res.json();
+        btn.disabled = false;
+        btn.textContent = 'Join Early Access →';
+
+        if (res.ok && data.user) {
+          displayPass(data.user);
+          await loadPublicStats();
+        } else {
+          showToast(data.error || 'Notice during registration');
+          if (data.user) displayPass(data.user);
+        }
+      } catch (err) {
+        btn.disabled = false;
+        btn.textContent = 'Join Early Access →';
+        showToast('Registration notice. Please try again.');
+      }
+    }
+
+    function displayPass(user) {
+      document.getElementById('passIdTag').textContent = user.id;
+      document.getElementById('passAvatar').src = user.avatar;
+      document.getElementById('passUsername').textContent = `@${user.username}`;
+      document.getElementById('passEmail').textContent = user.email;
+
+      const roleBadge = document.getElementById('passRoleBadge');
+      roleBadge.textContent = user.role;
+      roleBadge.style.background = user.role === 'CLIENT' ? '#F59E0B' : '#2563EB';
+
+      const perkLabel = document.getElementById('passPerkLabel');
+      const perkVal = document.getElementById('passPerkValue');
+
+      if (user.isFirst15) {
+        perkLabel.textContent = `⭐ FIRST 15 VIP BENEFIT (SPOT #${user.rank})`;
+        perkVal.textContent = user.perk;
+      } else {
+        perkLabel.textContent = `PRIORITY EARLY ACCESS (MEMBER #${user.rank})`;
+        perkVal.textContent = 'Guaranteed launch invite.';
+      }
+
+      goToStep(4);
+
+      // Automatic Redirect to Coming Soon
+      const targetUrl = window.location.protocol === 'file:' ? 'coming-soon.html' : '/coming-soon';
+      const continueBtn = document.getElementById('btnContinueComingSoon');
+      if (continueBtn) continueBtn.href = targetUrl;
+
+      let countdown = 3;
+      const countSpan = document.getElementById('countdownSecs');
+      if (countSpan) countSpan.textContent = countdown;
+
+      const interval = setInterval(() => {
+        countdown--;
+        if (countSpan) countSpan.textContent = countdown;
+        if (countdown <= 0) {
+          clearInterval(interval);
+          window.location.href = targetUrl;
+        }
+      }, 1000);
+    }
+
+    function goToStep(step) {
+      appState.step = step;
+      document.getElementById('step1Card').classList.toggle('hidden', step !== 1);
+      document.getElementById('step2Card').classList.toggle('hidden', step !== 2);
+      document.getElementById('step3Card').classList.toggle('hidden', step !== 3);
+      document.getElementById('step4Card').classList.toggle('hidden', step !== 4);
+
+      for (let i = 1; i <= 4; i++) {
+        const node = document.getElementById(`stepNode${i}`);
+        if (i < step) {
+          node.className = 'step-node completed';
+          node.querySelector('.step-circle').textContent = '✓';
+        } else if (i === step) {
+          node.className = 'step-node active';
+          node.querySelector('.step-circle').textContent = i;
+        } else {
+          node.className = 'step-node';
+          node.querySelector('.step-circle').textContent = i;
+        }
+      }
+
+      for (let j = 1; j <= 3; j++) {
+        document.getElementById(`stepLine${j}`).classList.toggle('filled', j < step);
+      }
+    }
+
+    function resetFlow() {
+      appState.googleUser = null;
+      appState.credentials = { username: '', password: '' };
+      document.getElementById('step1EmailForm').reset();
+      document.getElementById('step2Form').reset();
+      document.getElementById('step3Form').reset();
+      goToStep(1);
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.remove('hidden');
+      setTimeout(() => t.classList.add('hidden'), 3500);
+    }
+  </script>
+</body>
+</html>

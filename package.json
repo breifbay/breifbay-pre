@@ -1,0 +1,14 @@
+{
+  "name": "briefbay-prerelease",
+  "version": "1.0.0",
+  "description": "BriefBay Pre-Release Early Access Portal with Google Sign-in, VIP First-15 Allocation, and Real-time Marketplace Synchronization",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "sync": "node -e \"const { syncAllUsers } = require('./sync-db.js'); const fs = require('fs'); const data = JSON.parse(fs.readFileSync('./data/early_access_users.json', 'utf8')); console.log(syncAllUsers(data));\""
+  },
+  "keywords": ["briefbay", "early-access", "pre-release", "freelance-marketplace"],
+  "author": "BriefBay Team",
+  "license": "ISC"
+}
+

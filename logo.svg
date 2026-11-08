@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bbNavyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0B1E36" />
+      <stop offset="100%" stop-color="#152E52" />
+    </linearGradient>
+  </defs>
+  <!-- Stylized BriefBay Monogram (B) with dual ribbons -->
+  <g fill="url(#bbNavyGrad)" fill-rule="evenodd">
+    <!-- Top arc -->
+    <path d="M 150 130 C 150 110, 175 100, 200 100 L 320 100 C 390 100, 420 145, 420 190 C 420 235, 385 270, 310 270 C 270 270, 220 275, 175 300 C 160 308, 145 295, 150 280 C 170 230, 225 210, 310 210 C 355 210, 365 190, 365 175 C 365 155, 345 150, 305 150 L 210 150 C 175 150, 150 145, 150 130 Z" />
+    <!-- Middle-Bottom Ribbon -->
+    <path d="M 140 260 C 140 240, 170 215, 220 210 C 270 205, 320 210, 350 245 C 410 305, 420 370, 370 415 C 320 460, 220 455, 190 455 L 190 350 L 225 350 C 275 350, 340 350, 345 320 C 350 285, 295 270, 220 270 C 175 270, 140 285, 140 260 Z" />
+    <!-- Lower spine & hook -->
+    <path d="M 140 370 C 140 320, 165 290, 200 270 C 185 300, 160 340, 155 385 C 150 420, 140 450, 140 450 L 190 450 L 190 400 C 180 400, 155 400, 140 370 Z" />
+  </g>
+</svg>
+

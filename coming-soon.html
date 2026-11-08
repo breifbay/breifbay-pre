@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BriefBay — Coming Soon</title>
+  <link rel="icon" type="image/png" href="logo.png" />
+
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #071220;
+      background-image: 
+        radial-gradient(circle at 50% 30%, rgba(37, 99, 235, 0.2) 0%, transparent 60%),
+        radial-gradient(circle at 80% 80%, rgba(14, 42, 77, 0.4) 0%, transparent 50%);
+      color: #FFFFFF;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      overflow: hidden;
+      position: relative;
+      text-align: center;
+      padding: 20px;
+    }
+
+    /* Ambient Scanline overlay */
+    .scanlines {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      background: linear-gradient(
+        rgba(18, 16, 16, 0) 50%, 
+        rgba(0, 0, 0, 0.25) 50%
+      ), linear-gradient(
+        90deg,
+        rgba(255, 0, 0, 0.03),
+        rgba(0, 255, 0, 0.01),
+        rgba(0, 0, 255, 0.03)
+      );
+      background-size: 100% 4px, 6px 100%;
+      z-index: 20;
+    }
+
+    /* Brand Header Block */
+    .brand-wrap {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 36px;
+      text-decoration: none;
+      z-index: 10;
+    }
+
+    .brand-logo-img {
+      width: 48px;
+      height: 48px;
+      min-width: 48px;
+      max-width: 48px;
+      min-height: 48px;
+      max-height: 48px;
+      object-fit: contain;
+      border-radius: 12px;
+      background: #FFFFFF;
+      padding: 3px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    }
+
+    .brand-title {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: #FFFFFF;
+      line-height: 1;
+    }
+
+    .brand-title span {
+      color: #38BDF8;
+    }
+
+    /* ==========================================================
+       CYBERPUNK GLITCH TEXT EFFECT
+       ========================================================== */
+    .glitch-container {
+      position: relative;
+      display: inline-block;
+      margin: 10px 0;
+      z-index: 10;
+    }
+
+    .glitch-text {
+      font-size: clamp(48px, 11vw, 110px);
+      font-weight: 900;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      color: #FFFFFF;
+      position: relative;
+      display: inline-block;
+      text-shadow: 0 0 20px rgba(56, 189, 248, 0.5);
+      user-select: none;
+    }
+
+    .glitch-text::before,
+    .glitch-text::after {
+      content: attr(data-text);
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      clip: rect(0, 0, 0, 0);
+    }
+
+    /* Cyan / Electric Blue Channel Shift */
+    .glitch-text::before {
+      left: 3px;
+      text-shadow: -2px 0 #00E5FF;
+      animation: glitch-anim-1 2.5s infinite linear alternate-reverse;
+    }
+
+    /* Pink / Magenta Channel Shift */
+    .glitch-text::after {
+      left: -3px;
+      text-shadow: 2px 0 #FF0055;
+      animation: glitch-anim-2 3.2s infinite linear alternate-reverse;
+    }
+
+    @keyframes glitch-anim-1 {
+      0% { clip: rect(20px, 9999px, 44px, 0); transform: skew(0.3deg); }
+      5% { clip: rect(62px, 9999px, 85px, 0); transform: skew(-0.5deg); }
+      10% { clip: rect(10px, 9999px, 35px, 0); transform: skew(0.8deg); }
+      15% { clip: rect(80px, 9999px, 105px, 0); transform: skew(-0.2deg); }
+      20% { clip: rect(0, 0, 0, 0); }
+      55% { clip: rect(0, 0, 0, 0); }
+      60% { clip: rect(30px, 9999px, 55px, 0); transform: skew(0.5deg); }
+      65% { clip: rect(75px, 9999px, 95px, 0); transform: skew(-0.8deg); }
+      70% { clip: rect(15px, 9999px, 40px, 0); transform: skew(0.2deg); }
+      75% { clip: rect(0, 0, 0, 0); }
+      100% { clip: rect(0, 0, 0, 0); }
+    }
+
+    @keyframes glitch-anim-2 {
+      0% { clip: rect(45px, 9999px, 68px, 0); transform: skew(-0.4deg); }
+      5% { clip: rect(12px, 9999px, 32px, 0); transform: skew(0.6deg); }
+      10% { clip: rect(88px, 9999px, 115px, 0); transform: skew(-0.3deg); }
+      15% { clip: rect(25px, 9999px, 50px, 0); transform: skew(0.5deg); }
+      20% { clip: rect(0, 0, 0, 0); }
+      65% { clip: rect(0, 0, 0, 0); }
+      70% { clip: rect(50px, 9999px, 75px, 0); transform: skew(-0.7deg); }
+      75% { clip: rect(85px, 9999px, 110px, 0); transform: skew(0.4deg); }
+      80% { clip: rect(20px, 9999px, 45px, 0); transform: skew(-0.2deg); }
+      85% { clip: rect(0, 0, 0, 0); }
+      100% { clip: rect(0, 0, 0, 0); }
+    }
+
+    /* Subtle Pulsing Subglow */
+    .glow-line {
+      width: 140px;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, #38BDF8, transparent);
+      margin: 20px auto 0;
+      border-radius: 9999px;
+      box-shadow: 0 0 15px #38BDF8;
+      animation: pulse-glow 2s infinite ease-in-out;
+    }
+
+    @keyframes pulse-glow {
+      0%, 100% { opacity: 0.4; width: 100px; }
+      50% { opacity: 1; width: 160px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Scanline texture -->
+  <div class="scanlines"></div>
+
+  <!-- Brand Block with Logo -->
+  <div class="brand-wrap">
+    <img 
+      src="logo.png" 
+      alt="BriefBay" 
+      class="brand-logo-img"
+      width="48" 
+      height="48"
+      onerror="this.onerror=null; this.src='logo.svg'"
+    />
+    <div class="brand-title">Brief<span>Bay</span></div>
+  </div>
+
+  <!-- Glitched Coming Soon Text -->
+  <div class="glitch-container">
+    <div class="glitch-text" data-text="COMING SOON">COMING SOON</div>
+    <div class="glow-line"></div>
+  </div>
+
+</body>
+</html>
+
