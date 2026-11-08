@@ -169,11 +169,22 @@ function isAuthorizedAdmin(req) {
   return true;
 }
 
+function getEffectiveRedirectUri(req) {
+  if (process.env.GOOGLE_REDIRECT_URI && !process.env.GOOGLE_REDIRECT_URI.includes('localhost')) {
+    return process.env.GOOGLE_REDIRECT_URI;
+  }
+  const proto = req.headers['x-forwarded-proto'] || (req.socket.encrypted ? 'https' : 'http');
+  const host = req.headers.host || 'localhost:4000';
+  return `${proto}://${host}/auth/google/callback`;
+}
+
 // -------------------------------------------------------------
 // HTTP SERVER WITH SECURITY HEADERS & DEFENSES
 // -------------------------------------------------------------
 const server = http.createServer(async (req, res) => {
   const ip = getClientIp(req);
+  const proto = req.headers['x-forwarded-proto'] || (req.socket.encrypted ? 'https' : 'http');
+  const effectiveRedirectUri = getEffectiveRedirectUri(req);
 
   // Apply strict HTTP Security Headers to prevent clickjacking, MIME sniffing, XSS
   res.setHeader('X-Content-Type-Options', 'nosniff');
@@ -191,24 +202,27 @@ const server = http.createServer(async (req, res) => {
 
   const parsedUrl = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
   const pathname = parsedUrl.pathname;
+  const cleanPath = pathname.replace(/\/+$/, '') || '/';
+
+  console.log(`[HTTP ${req.method}] ${pathname}`);
 
   // -------------------------------------------------------------
   // GET ROUTES
   // -------------------------------------------------------------
   if (req.method === 'GET') {
     // 1. Web Portal UI
-    if (pathname === '/' || pathname === '/index.html') {
+    if (cleanPath === '/' || cleanPath === '/index.html') {
       res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
       return fs.createReadStream(path.join(__dirname, 'index.html')).pipe(res);
     }
 
-    if (pathname === '/coming-soon' || pathname === '/coming-soon.html') {
+    if (cleanPath === '/coming-soon' || cleanPath === '/coming-soon.html') {
       res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
       return fs.createReadStream(path.join(__dirname, 'coming-soon.html')).pipe(res);
     }
 
     // 2. Static Assets
-    if (pathname === '/logo.png') {
+    if (cleanPath === '/logo.png') {
       const p = path.join(__dirname, 'logo.png');
       if (fs.existsSync(p)) {
         res.writeHead(200, { 'Content-Type': 'image/png' });
@@ -216,7 +230,7 @@ const server = http.createServer(async (req, res) => {
       }
     }
 
-    if (pathname === '/logo.svg') {
+    if (cleanPath === '/logo.svg') {
       const p = path.join(__dirname, 'logo.svg');
       if (fs.existsSync(p)) {
         res.writeHead(200, { 'Content-Type': 'image/svg+xml' });
@@ -225,7 +239,7 @@ const server = http.createServer(async (req, res) => {
     }
 
     // 3. Google OAuth Redirect
-    if (pathname === '/auth/google') {
+    if (cleanPath === '/auth/google') {
       if (!GOOGLE_CLIENT_ID) {
         res.writeHead(302, { Location: '/?google_config=needed' });
         return res.end();
@@ -233,7 +247,7 @@ const server = http.createServer(async (req, res) => {
 
       const googleAuthUrl = new URL('https://accounts.google.com/o/oauth2/v2/auth');
       googleAuthUrl.searchParams.set('client_id', GOOGLE_CLIENT_ID);
-      googleAuthUrl.searchParams.set('redirect_uri', GOOGLE_REDIRECT_URI);
+      googleAuthUrl.searchParams.set('redirect_uri', effectiveRedirectUri);
       googleAuthUrl.searchParams.set('response_type', 'code');
       googleAuthUrl.searchParams.set('scope', 'openid profile email');
       googleAuthUrl.searchParams.set('access_type', 'offline');
@@ -243,17 +257,24 @@ const server = http.createServer(async (req, res) => {
       return res.end();
     }
 
-    // 4. Google OAuth Callback
-    if (pathname === '/auth/google/callback') {
+    // 4. Google OAuth Callback (Matches all standard callback paths)
+    if (
+      cleanPath === '/auth/google/callback' || 
+      cleanPath === '/api/auth/callback/google' || 
+      cleanPath === '/auth/callback' || 
+      cleanPath === '/callback'
+    ) {
       const code = parsedUrl.searchParams.get('code');
       const error = parsedUrl.searchParams.get('error');
 
       if (error || !code) {
+        console.error('[Google OAuth] Error or missing code:', error);
         res.writeHead(302, { Location: `/?error=${encodeURIComponent(error || 'Access denied by Google')}` });
         return res.end();
       }
 
       try {
+        console.log(`[Google OAuth] Exchanging code using redirect URI: ${effectiveRedirectUri}`);
         const tokenRes = await fetch('https://oauth2.googleapis.com/token', {
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -261,22 +282,37 @@ const server = http.createServer(async (req, res) => {
             code,
             client_id: GOOGLE_CLIENT_ID,
             client_secret: GOOGLE_CLIENT_SECRET,
-            redirect_uri: GOOGLE_REDIRECT_URI,
+            redirect_uri: effectiveRedirectUri,
             grant_type: 'authorization_code'
           })
         });
 
         const tokenData = await tokenRes.json();
         if (!tokenRes.ok || !tokenData.access_token) {
-          throw new Error(tokenData.error_description || 'Failed to exchange token');
+          console.error('[Google OAuth Token Error]', tokenData);
+          res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+          return res.end(`
+            <!DOCTYPE html>
+            <html>
+            <head><meta charset="utf-8"><title>OAuth Error</title></head>
+            <body style="background:#0B1E36; color:#FFF; font-family:sans-serif; text-align:center; padding:50px;">
+              <h2>Google Authentication Notice</h2>
+              <p style="color:#F87171;">${tokenData.error_description || tokenData.error || 'Token exchange failed'}</p>
+              <p style="color:#94A3B8; font-size:12px;">Redirect URI configured: <code>${effectiveRedirectUri}</code></p>
+              <a href="/" style="color:#38BDF8; display:inline-block; margin-top:20px;">&larr; Return to BriefBay Home</a>
+            </body>
+            </html>
+          `);
         }
 
+        console.log('[Google OAuth] Fetching user profile info...');
         const userRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
           headers: { Authorization: `Bearer ${tokenData.access_token}` }
         });
         const googleUser = await userRes.json();
 
-        const returnUrl = new URL('/', `http://${req.headers.host || 'localhost'}`);
+        console.log(`[Google OAuth Success] Authenticated: ${googleUser.email} (${googleUser.name})`);
+        const returnUrl = new URL('/', `${proto}://${req.headers.host || 'localhost'}`);
         returnUrl.searchParams.set('google_auth', 'success');
         returnUrl.searchParams.set('email', googleUser.email || '');
         returnUrl.searchParams.set('name', googleUser.name || '');
@@ -648,8 +684,9 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
-  res.writeHead(404);
-  res.end('Not Found');
+  console.warn(`[404 Not Found] ${req.method} ${pathname}`);
+  res.writeHead(404, { 'Content-Type': 'text/html; charset=utf-8' });
+  res.end(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>Not Found</title></head><body style="background:#0B1E36;color:#FFF;font-family:sans-serif;text-align:center;padding:50px;"><h2>Page Not Found</h2><p style="color:#94A3B8;">The URL <code>${pathname}</code> was not found.</p><a href="/" style="color:#38BDF8;">&larr; Return to BriefBay Home</a></body></html>`);
 });
 
 server.listen(PORT, () => {
